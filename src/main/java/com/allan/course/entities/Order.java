@@ -2,6 +2,8 @@ package com.allan.course.entities;
 
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -9,9 +11,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
-
-import org.springframework.core.OrderComparator.OrderSourceProvider;
 
 import com.allan.course.entities.enums.OrderStatus;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -33,6 +34,9 @@ public class Order implements Serializable{
 	@JoinColumn(name = "client_id")
 	private User client;
 
+	@OneToMany(mappedBy = "id.order")
+	private Set<OrderItem> itens = new HashSet<>(); 
+	
 	public Order() {
 		super();
 	}
@@ -71,6 +75,10 @@ public class Order implements Serializable{
 	
 	public OrderStatus getOrderStatus() {
 		return OrderStatus.valueOf(orderStatus);
+	}
+	
+	public Set<OrderItem> getItems() {
+		return itens;
 	}
 
 	public void setOrderStatus(OrderStatus orderStatus) {
